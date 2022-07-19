@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Project, type: :model do
+
   # ユーザー単位では重複したプロジェクト名を許可しないこと
   it "does not allow duplicate project names per user" do
     user = User.create(
@@ -44,5 +45,37 @@ RSpec.describe Project, type: :model do
     )
 
     expect(other_project).to be_valid
+  end
+
+  # プロジェクトが遅延している場合は真が返ること
+  it "returns true when project after due_on" do
+    user = User.create(
+      first_name: "Joe",
+      last_name:  "Tester",
+      email:      "joetester@example.com",
+      password:   "dottle-nouveau-pavilion-tights-furze"
+    )
+    project = user.projects.create(
+      name: "Test Project",
+      due_on: Time.zone.yesterday
+    )
+
+    expect(project.late?).to be_truthy
+  end
+
+  # プロジェクトが遅延していない場合は偽が返ること
+  it "returns false when project before due_on" do
+    user = User.create(
+      first_name: "Joe",
+      last_name:  "Tester",
+      email:      "joetester@example.com",
+      password:   "dottle-nouveau-pavilion-tights-furze"
+    )
+    project = user.projects.create(
+      name: "Test Project",
+      due_on: Time.zone.tomorrow
+    )
+
+    expect(project.late?).to be_falsey
   end
 end
