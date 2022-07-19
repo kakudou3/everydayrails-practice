@@ -46,7 +46,9 @@ RSpec.describe User, type: :model do
   end
 
   # 重複したメールアドレスなら無効な状態であること
-  it "is invalid with a duplicate email address"
+  it "is invalid with a duplicate email address" do
+
+  end
 
   # ユーザーのフルネームを文字列として返すこと
   it "returns a user's full name as a string" do
